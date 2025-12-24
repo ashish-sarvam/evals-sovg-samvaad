@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+
+# OS
+.DS_Store
+
+# IDE
+.specstory/
+.cursorindexingignore
+
+# Results (optional - remove if you want to track these)
+# tau-bench/results/

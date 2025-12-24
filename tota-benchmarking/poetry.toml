@@ -1,0 +1,5 @@
+[virtualenvs]
+in-project = true
+
+[repositories.google]
+url = "https://europe-west4-python.pkg.dev/gpu-reservation-sarvam/sarvam-python-ci"
