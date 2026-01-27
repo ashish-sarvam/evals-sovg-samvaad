@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "soft-evals"
+version = "0.1.0"
+description = ""
+authors = ["ashish-sarvam <ashish@sarvam.ai>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+openai = "^2.15.0"
+sarvamai = "^0.1.22"
+pydub = "^0.25.1"
+tinker = "^0.8.0"
+tinker-cookbook = {path = "tinker-cookbook"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

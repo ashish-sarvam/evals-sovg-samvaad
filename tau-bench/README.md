@@ -50,13 +50,18 @@ git clone https://github.com/sierra-research/tau-bench && cd ./tau-bench
 pip install -e .
 ```
 
-3. Set up your OpenAI / Anthropic / Google / Mistral / AnyScale API keys as environment variables.
+3. Set up your OpenAI / Anthropic / Google / Mistral / AnyScale / Azure OpenAI API keys as environment variables.
 
 ```bash
 OPENAI_API_KEY=...
 ANTHROPIC_API_KEY=...
 GOOGLE_API_KEY=...
 MISTRAL_API_KEY=...
+
+# For Azure OpenAI
+AZURE_API_KEY=...
+AZURE_API_BASE=https://<your-resource-name>.openai.azure.com/
+AZURE_API_VERSION=2024-12-01-preview  # optional, defaults to a recent version
 ```
 
 ## Run
@@ -76,6 +81,50 @@ python run.py --agent-strategy tool-calling --env retail --model gpt-4o --model-
 ```
 
 This command will run only the tasks with IDs 2, 4, and 6.
+
+## Azure OpenAI
+
+τ-bench supports Azure OpenAI through litellm. To use Azure OpenAI:
+
+1. Set up your Azure OpenAI environment variables:
+
+```bash
+export AZURE_API_KEY=<your-azure-subscription-key>
+export AZURE_API_BASE=https://<your-resource-name>.openai.azure.com/
+export AZURE_API_VERSION=2024-12-01-preview  # optional
+```
+
+2. Run with `--model-provider azure` and `--model <deployment-name>`:
+
+```bash
+python run.py \
+  --agent-strategy tool-calling \
+  --env retail \
+  --model gpt-4o \
+  --model-provider azure \
+  --user-model gpt-4o \
+  --user-model-provider azure \
+  --user-strategy llm \
+  --max-concurrency 10
+```
+
+You can also pass the API base URL via command line instead of environment variable:
+
+```bash
+python run.py \
+  --agent-strategy tool-calling \
+  --env retail \
+  --model gpt-4o \
+  --model-provider azure \
+  --api-base https://<your-resource-name>.openai.azure.com/ \
+  --user-model gpt-4o \
+  --user-model-provider azure \
+  --user-api-base https://<your-resource-name>.openai.azure.com/ \
+  --user-strategy llm \
+  --max-concurrency 10
+```
+
+**Note**: The `--model` should be your Azure OpenAI deployment name (e.g., `gpt-4o`, `gpt-4-turbo`), not the full model ID.
 
 ## User simulators
 
@@ -175,6 +224,11 @@ Please submit issues or pull requests if you find problems with the benchmark.
 }
 ```
 
+## vLLM
+
+To run with a local vLLM server:
+
+```bash
 export VLLM_API_BASE="http://localhost:8000/v1"  # or your vLLM server URL
 
 python run.py \
@@ -182,7 +236,9 @@ python run.py \
   --env retail \
   --model <your-model-name> \
   --model-provider vllm \
+  --api-base http://localhost:8000/v1 \
   --user-model gpt-4o \
   --user-model-provider openai \
   --user-strategy llm \
   --max-concurrency 10
+```

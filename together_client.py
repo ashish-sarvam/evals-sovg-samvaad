@@ -1,6 +1,10 @@
+import os
 from together import Together
+from dotenv import load_dotenv
 
-TOGETHER_API_KEY="6e98df5e19cc521af9d51f24c7c2a15c2b452137ffa8dfd6d17ad5cb87a9c699" #noqa: E501
+load_dotenv()
+
+TOGETHER_API_KEY = os.getenv("TOGETHER_API_KEY", "")
 
 client = Together(api_key=TOGETHER_API_KEY)
 stream = client.chat.completions.create(

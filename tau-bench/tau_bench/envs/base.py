@@ -19,14 +19,23 @@ from tau_bench.types import (
 )
 
 ToHashable = Union[
-    str, int, float, Dict[str, "ToHashable"], List["ToHashable"], Set["ToHashable"]
+    str,
+    int,
+    float,
+    Dict[str, "ToHashable"],
+    List["ToHashable"],
+    Set["ToHashable"],
 ]
-Hashable = Union[str, int, float, Tuple["Hashable"], Tuple[Tuple[str, "Hashable"]]]
+Hashable = Union[
+    str, int, float, Tuple["Hashable"], Tuple[Tuple[str, "Hashable"]]
+]
 
 
 def to_hashable(item: ToHashable) -> Hashable:
     if isinstance(item, dict):
-        return tuple((key, to_hashable(value)) for key, value in sorted(item.items()))
+        return tuple(
+            (key, to_hashable(value)) for key, value in sorted(item.items())
+        )
     elif isinstance(item, list):
         return tuple(to_hashable(element) for element in item)
     elif isinstance(item, set):
@@ -72,7 +81,10 @@ class Env(object):
         self.wiki = wiki
         self.rules = rules
         self.user = load_user(
-            user_strategy=user_strategy, model=user_model, provider=user_provider, api_base=user_api_base
+            user_strategy=user_strategy,
+            model=user_model,
+            provider=user_provider,
+            api_base=user_api_base,
         )
         self.actions: List[Action] = []
 
@@ -83,9 +95,12 @@ class Env(object):
         self.data = self.data_load_func()
         self.task = self.tasks[task_index]
         self.actions = []
-        initial_observation = self.user.reset(instruction=self.task.instruction)
+        initial_observation = self.user.reset(
+            instruction=self.task.instruction
+        )
         return EnvResetResponse(
-            observation=initial_observation, info=EnvInfo(task=self.task, source="user")
+            observation=initial_observation,
+            info=EnvInfo(task=self.task, source="user"),
         )
 
     def step(self, action: Action) -> EnvResponse:
@@ -97,6 +112,9 @@ class Env(object):
         if action.name == RESPOND_ACTION_NAME:
             observation = self.user.step(action.kwargs["content"])
             info.source = "user"
+            # Handle None observation (can happen if model returns empty response)
+            if observation is None:
+                observation = ""
             done = "###STOP###" in observation
         elif action.name in self.tools_map:
             try:
@@ -117,7 +135,9 @@ class Env(object):
             reward = reward_res.reward
             info.reward_info = reward_res
             info.user_cost = self.user.get_total_cost()
-        return EnvResponse(observation=observation, reward=reward, done=done, info=info)
+        return EnvResponse(
+            observation=observation, reward=reward, done=done, info=info
+        )
 
     def get_data_hash(self) -> str:
         return consistent_hash(to_hashable(self.data))
@@ -126,7 +146,9 @@ class Env(object):
         data_hash = self.get_data_hash()
         reward = 1.0
         actions = [
-            action for action in self.task.actions if action.name != RESPOND_ACTION_NAME
+            action
+            for action in self.task.actions
+            if action.name != RESPOND_ACTION_NAME
         ]
 
         # Check if the database changes are correct. If they are not correct, then we set the reward to 0.
@@ -161,5 +183,5 @@ class Env(object):
                     r_outputs = 0.0
                     reward = 0.0
             info = RewardOutputInfo(r_outputs=r_outputs, outputs=outputs)
-            
+
         return RewardResult(reward=reward, info=info, actions=actions)

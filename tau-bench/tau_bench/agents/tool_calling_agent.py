@@ -27,7 +27,10 @@ class ToolCallingAgent(Agent):
         self.api_base = api_base
 
     def solve(
-        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
+        self,
+        env: Env,
+        task_index: Optional[int] = None,
+        max_num_steps: int = 30,
     ) -> SolveResult:
         total_cost = 0.0
         env_reset_res = env.reset(task_index=task_index)
@@ -62,8 +65,12 @@ class ToolCallingAgent(Agent):
                         next_message,
                         {
                             "role": "tool",
-                            "tool_call_id": next_message["tool_calls"][0]["id"],
-                            "name": next_message["tool_calls"][0]["function"]["name"],
+                            "tool_call_id": next_message["tool_calls"][0][
+                                "id"
+                            ],
+                            "name": next_message["tool_calls"][0]["function"][
+                                "name"
+                            ],
                             "content": env_response.observation,
                         },
                     ]
@@ -88,11 +95,18 @@ class ToolCallingAgent(Agent):
 def message_to_action(
     message: Dict[str, Any],
 ) -> Action:
-    if "tool_calls" in message and message["tool_calls"] is not None and len(message["tool_calls"]) > 0 and message["tool_calls"][0]["function"] is not None:
+    if (
+        "tool_calls" in message
+        and message["tool_calls"] is not None
+        and len(message["tool_calls"]) > 0
+        and message["tool_calls"][0]["function"] is not None
+    ):
         tool_call = message["tool_calls"][0]
         return Action(
             name=tool_call["function"]["name"],
             kwargs=json.loads(tool_call["function"]["arguments"]),
         )
     else:
-        return Action(name=RESPOND_ACTION_NAME, kwargs={"content": message["content"]})
+        return Action(
+            name=RESPOND_ACTION_NAME, kwargs={"content": message["content"]}
+        )

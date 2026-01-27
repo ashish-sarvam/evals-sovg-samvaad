@@ -21,9 +21,13 @@ class MockRetailDomainEnv(Env):
     ):
         match task_split:
             case "test":
-                from tau_bench.envs.retail.tasks_test import TASKS_TEST as tasks
+                from tau_bench.envs.retail.tasks_test import (
+                    TASKS_TEST as tasks,
+                )
             case "train":
-                from tau_bench.envs.retail.tasks_train import TASKS_TRAIN as tasks
+                from tau_bench.envs.retail.tasks_train import (
+                    TASKS_TRAIN as tasks,
+                )
             case "dev":
                 from tau_bench.envs.retail.tasks_dev import TASKS_DEV as tasks
             case _:

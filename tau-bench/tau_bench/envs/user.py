@@ -35,7 +35,9 @@ class HumanUserSimulationEnv(BaseUserSimulationEnv):
 
 
 class LLMUserSimulationEnv(BaseUserSimulationEnv):
-    def __init__(self, model: str, provider: str, api_base: str = None) -> None:
+    def __init__(
+        self, model: str, provider: str, api_base: str = None
+    ) -> None:
         super().__init__()
         self.messages: List[Dict[str, Any]] = []
         self.model = model
@@ -92,7 +94,9 @@ Rules:
 
 
 class ReactUserSimulationEnv(LLMUserSimulationEnv):
-    def __init__(self, model: str, provider: str, api_base: str = None) -> None:
+    def __init__(
+        self, model: str, provider: str, api_base: str = None
+    ) -> None:
         super().__init__(model=model, provider=provider, api_base=api_base)
         self.reset()
 
@@ -165,7 +169,13 @@ User Response:
 
 
 class VerifyUserSimulationEnv(LLMUserSimulationEnv):
-    def __init__(self, model: str, provider: str, max_attempts: int = 3, api_base: str = None) -> None:
+    def __init__(
+        self,
+        model: str,
+        provider: str,
+        max_attempts: int = 3,
+        api_base: str = None,
+    ) -> None:
         self.model = model
         self.provider = provider
         self.api_base = api_base
@@ -285,7 +295,13 @@ Response:
 
 
 class ReflectionUserSimulationEnv(LLMUserSimulationEnv):
-    def __init__(self, model: str, provider: str, max_attempts: int = 2, api_base: str = None) -> None:
+    def __init__(
+        self,
+        model: str,
+        provider: str,
+        max_attempts: int = 2,
+        api_base: str = None,
+    ) -> None:
         self.model = model
         self.provider = provider
         self.api_base = api_base
@@ -350,23 +366,33 @@ def load_user(
             raise ValueError("LLM user strategy requires a model")
         if provider is None:
             raise ValueError("LLM user strategy requires a model provider")
-        return LLMUserSimulationEnv(model=model, provider=provider, api_base=api_base)
+        return LLMUserSimulationEnv(
+            model=model, provider=provider, api_base=api_base
+        )
     elif user_strategy == UserStrategy.REACT:
         if model is None:
             raise ValueError("React user strategy requires a model")
         if provider is None:
             raise ValueError("React user strategy requires a model provider")
-        return ReactUserSimulationEnv(model=model, provider=provider, api_base=api_base)
+        return ReactUserSimulationEnv(
+            model=model, provider=provider, api_base=api_base
+        )
     elif user_strategy == UserStrategy.VERIFY:
         if model is None:
             raise ValueError("Verify user strategy requires a model")
         if provider is None:
             raise ValueError("Verify user strategy requires a model provider")
-        return VerifyUserSimulationEnv(model=model, provider=provider, api_base=api_base)
+        return VerifyUserSimulationEnv(
+            model=model, provider=provider, api_base=api_base
+        )
     elif user_strategy == UserStrategy.REFLECTION:
         if model is None:
             raise ValueError("Reflection user strategy requires a model")
         if provider is None:
-            raise ValueError("Reflection user strategy requires a model provider")
-        return ReflectionUserSimulationEnv(model=model, provider=provider, api_base=api_base)
+            raise ValueError(
+                "Reflection user strategy requires a model provider"
+            )
+        return ReflectionUserSimulationEnv(
+            model=model, provider=provider, api_base=api_base
+        )
     raise ValueError(f"Unknown user strategy {user_strategy}")

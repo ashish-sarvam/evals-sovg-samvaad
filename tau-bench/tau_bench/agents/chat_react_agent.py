@@ -27,7 +27,10 @@ class ChatReActAgent(Agent):
     ) -> None:
         instruction = REACT_INSTRUCTION if use_reasoning else ACT_INSTRUCTION
         self.prompt = (
-            wiki + "\n#Available tools\n" + json.dumps(tools_info) + instruction
+            wiki
+            + "\n#Available tools\n"
+            + json.dumps(tools_info)
+            + instruction
         )
         self.model = model
         self.provider = provider
@@ -60,11 +63,20 @@ class ChatReActAgent(Agent):
             }
         assert "name" in action_parsed
         assert "arguments" in action_parsed
-        action = Action(name=action_parsed["name"], kwargs=action_parsed["arguments"])
-        return message.model_dump(), action, res._hidden_params["response_cost"] or 0.0
+        action = Action(
+            name=action_parsed["name"], kwargs=action_parsed["arguments"]
+        )
+        return (
+            message.model_dump(),
+            action,
+            res._hidden_params["response_cost"] or 0.0,
+        )
 
     def solve(
-        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
+        self,
+        env: Env,
+        task_index: Optional[int] = None,
+        max_num_steps: int = 30,
     ) -> SolveResult:
         response = env.reset(task_index=task_index)
         reward = 0.0

@@ -1,0 +1,25 @@
+# Artifacts - generated outputs (transcripts, audio, results, multilingual_results)
+artifacts/
+
+# Config with API keys (use config.example.py as template)
+multilingual_evals/config.py
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

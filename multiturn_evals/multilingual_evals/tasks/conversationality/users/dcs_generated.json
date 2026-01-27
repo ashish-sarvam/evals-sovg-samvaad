@@ -1,0 +1,234 @@
+{
+  "agent_name": "divya_agriculture_survey_agent",
+  "agent_task_summary": "Verify crops for multiple survey numbers sequentially with rural farmers via phone call.",
+  "generation_notes": "Agent must strictly follow sequential crop verification, handle refusals, suspicion, agitation, language confusion, and avoid skipping surveys despite pressure or distractions.",
+  "blueprints": [
+    {
+      "name": "noise_user",
+      "tags": [
+        "audio_issues",
+        "patience",
+        "repetition"
+      ],
+      "difficulty": "medium",
+      "challenge_start": "immediate",
+      "description": "User with very poor network and constant audio complaints.",
+      "behavior_steps": [
+        "Answer call with 'hello? hello? awaaz cut ho rahi hai'",
+        "Frequently ask agent to repeat name and purpose",
+        "Complain about network - 'yahan signal bahut kharab hai'",
+        "Give half answers or wrong survey numbers due to mishearing",
+        "Interrupt agent saying 'ruk ruk, samjha nahi'",
+        "After many turns, ask to call back later with a time"
+      ],
+      "breaking_point": "Agent may skip survey order or confirm without clarity.",
+      "expected_agent_behavior": [
+        "Check audio issues explicitly",
+        "Use short clear sentences",
+        "Avoid assuming confirmations",
+        "Offer callback when unresolved",
+        "Maintain calm tone"
+      ]
+    },
+    {
+      "name": "suspicious_user",
+      "tags": [
+        "trust_building",
+        "scam_suspicion"
+      ],
+      "difficulty": "hard",
+      "challenge_start": "after_greeting",
+      "description": "User believes the call is a scam and demands proof.",
+      "behavior_steps": [
+        "Respond with 'Aap kaun ho? Government ka scam lag raha hai'",
+        "Ask for ID proof or office address repeatedly",
+        "Threaten to complain - 'Main police ko bolunga'",
+        "Refuse to answer crop questions initially",
+        "After reassurance, reluctantly answer one survey",
+        "Again question legitimacy before next survey"
+      ],
+      "breaking_point": "Agent may over-explain or argue, violating flow.",
+      "expected_agent_behavior": [
+        "Give brief official explanation once",
+        "Redirect to survey questions",
+        "Do not argue or overshare",
+        "End call if refusal continues"
+      ]
+    },
+    {
+      "name": "scheme_asker",
+      "tags": [
+        "off_topic",
+        "redirection"
+      ],
+      "difficulty": "medium",
+      "challenge_start": "mid_conversation",
+      "description": "User repeatedly asks about subsidies and schemes.",
+      "behavior_steps": [
+        "Initially cooperate for first survey",
+        "Suddenly ask 'PM Kisan ka paisa kab milega?'",
+        "Ignore crop question and continue about schemes",
+        "Ask for complaint registration",
+        "Agree briefly then again divert to schemes",
+        "Show mild frustration if agent redirects"
+      ],
+      "breaking_point": "Agent might answer scheme details or lose survey order.",
+      "expected_agent_behavior": [
+        "Politely redirect to survey",
+        "Repeat last unanswered question",
+        "Avoid giving scheme info",
+        "Stay structured"
+      ]
+    },
+    {
+      "name": "angry_user",
+      "tags": [
+        "emotion_handling",
+        "de_escalation"
+      ],
+      "difficulty": "hard",
+      "challenge_start": "immediate",
+      "description": "User is angry and uses harsh language.",
+      "behavior_steps": [
+        "Answer rudely - 'Bar bar call karke pareshan karte ho'",
+        "Shout about government inefficiency",
+        "Refuse to listen to explanation",
+        "Use insulting tone toward agent",
+        "After one survey, anger escalates again",
+        "Explicitly say 'bas band karo ye call'"
+      ],
+      "breaking_point": "Agent may continue despite explicit refusal.",
+      "expected_agent_behavior": [
+        "Acknowledge frustration",
+        "Do not argue",
+        "End call immediately on refusal",
+        "Thank user politely"
+      ]
+    },
+    {
+      "name": "loop_pusher",
+      "tags": [
+        "loop_control",
+        "instruction_following"
+      ],
+      "difficulty": "medium",
+      "challenge_start": "after_greeting",
+      "description": "User keeps asking agent to start again.",
+      "behavior_steps": [
+        "Confirm identity initially",
+        "After first survey, say 'phir se shuru se bolo'",
+        "Ask agent to repeat introduction multiple times",
+        "Claim confusion each time",
+        "Interrupt survey flow repeatedly",
+        "Eventually answer but asks again to restart"
+      ],
+      "breaking_point": "Agent may restart incorrectly or mix survey order.",
+      "expected_agent_behavior": [
+        "Acknowledge presence",
+        "Restate last pending question",
+        "Avoid restarting entire flow",
+        "Maintain order"
+      ]
+    },
+    {
+      "name": "confused_elder",
+      "tags": [
+        "comprehension",
+        "clarity"
+      ],
+      "difficulty": "medium",
+      "challenge_start": "immediate",
+      "description": "Elderly user with low understanding of surveys.",
+      "behavior_steps": [
+        "Speak slowly - 'beta, mujhe samajh nahi aa raha'",
+        "Confuse survey number with village name",
+        "Ask 'ye form kyun bhar rahe ho?' repeatedly",
+        "Give wrong crop names confidently",
+        "Forget previous answers",
+        "Agree but with incorrect understanding"
+      ],
+      "breaking_point": "Agent may accept incorrect confirmations.",
+      "expected_agent_behavior": [
+        "Use simple explanations once",
+        "Clarify crop vs survey",
+        "Politely correct misunderstandings",
+        "Ask clear confirmations"
+      ]
+    },
+    {
+      "name": "multitasking_user",
+      "tags": [
+        "attention_management",
+        "silent_user_rule"
+      ],
+      "difficulty": "medium",
+      "challenge_start": "mid_conversation",
+      "description": "User is distracted and gives vague responses.",
+      "behavior_steps": [
+        "Answer while doing other work",
+        "Respond with 'haan haan' or 'theek hai'",
+        "Say 'bolo bolte raho' without answering",
+        "Miss specific crop questions",
+        "Get annoyed if asked to repeat",
+        "Finally says 'jo likha hai wahi sahi hai' unclearly"
+      ],
+      "breaking_point": "Agent may treat vague replies as confirmation.",
+      "expected_agent_behavior": [
+        "Apply silent-user rule",
+        "Paraphrase question again",
+        "Seek explicit crop confirmation",
+        "Stay patient"
+      ]
+    },
+    {
+      "name": "agent_specific_order_breaker",
+      "tags": [
+        "workflow_integrity",
+        "edge_case"
+      ],
+      "difficulty": "hard",
+      "challenge_start": "after_greeting",
+      "description": "User tries to jump surveys and merge answers.",
+      "behavior_steps": [
+        "Confirm identity",
+        "Say 'sab survey mein same crop hai'",
+        "Refuse to answer one-by-one",
+        "Mix villages and survey numbers",
+        "Get irritated when agent insists sequentially",
+        "Threaten to hang up if not done fast"
+      ],
+      "breaking_point": "Agent may accept bulk confirmation.",
+      "expected_agent_behavior": [
+        "Insist on one survey at a time",
+        "Explain necessity briefly",
+        "Do not merge surveys",
+        "End call if refusal continues"
+      ]
+    },
+    {
+      "name": "agent_specific_hold_trap",
+      "tags": [
+        "hold_handling",
+        "edge_case"
+      ],
+      "difficulty": "hard",
+      "challenge_start": "mid_conversation",
+      "description": "User puts call on hold intentionally.",
+      "behavior_steps": [
+        "Initially cooperate normally",
+        "Mid verification say 'rukho, main call hold pe daal raha hoon'",
+        "Leave long silence",
+        "Return briefly then put on hold again",
+        "Expect agent to continue waiting",
+        "Test if agent ends call correctly"
+      ],
+      "breaking_point": "Agent may continue speaking or wait indefinitely.",
+      "expected_agent_behavior": [
+        "Recognize hold situation",
+        "End call immediately",
+        "Do not continue survey",
+        "Maintain protocol"
+      ]
+    }
+  ]
+}

@@ -18,16 +18,28 @@ from tau_bench.envs.user import UserStrategy
 
 
 def run(config: RunConfig) -> List[EnvRunResult]:
-    assert config.env in ["retail", "airline"], "Only retail and airline envs are supported"
+    assert config.env in ["retail", "airline"], (
+        "Only retail and airline envs are supported"
+    )
     assert config.model_provider in provider_list, "Invalid model provider"
-    assert config.user_model_provider in provider_list, "Invalid user model provider"
-    assert config.agent_strategy in ["tool-calling", "act", "react", "few-shot"], "Invalid agent strategy"
+    assert config.user_model_provider in provider_list, (
+        "Invalid user model provider"
+    )
+    assert config.agent_strategy in [
+        "tool-calling",
+        "act",
+        "react",
+        "few-shot",
+    ], "Invalid agent strategy"
     assert config.task_split in ["train", "test", "dev"], "Invalid task split"
-    assert config.user_strategy in [item.value for item in UserStrategy], "Invalid user strategy"
+    assert config.user_strategy in [item.value for item in UserStrategy], (
+        "Invalid user strategy"
+    )
 
     random.seed(config.seed)
     time_str = datetime.now().strftime("%m%d%H%M%S")
     ckpt_path = f"{config.log_dir}/{config.agent_strategy}-{config.model.split('/')[-1]}-{config.temperature}_range_{config.start_index}-{config.end_index}_user-{config.user_model.split('/')[-1]}-{config.user_strategy}_{time_str}.json"
+    error_log_path = ckpt_path.replace(".json", "_errors.jsonl")
     if not os.path.exists(config.log_dir):
         os.makedirs(config.log_dir)
 
@@ -46,16 +58,20 @@ def run(config: RunConfig) -> List[EnvRunResult]:
         config=config,
     )
     end_index = (
-        len(env.tasks) if config.end_index == -1 else min(config.end_index, len(env.tasks))
+        len(env.tasks)
+        if config.end_index == -1
+        else min(config.end_index, len(env.tasks))
     )
     results: List[EnvRunResult] = []
     lock = multiprocessing.Lock()
     if config.task_ids and len(config.task_ids) > 0:
-        print(f"Running tasks {config.task_ids} (checkpoint path: {ckpt_path})")
+        print(
+            f"Running tasks {config.task_ids} (checkpoint path: {ckpt_path})"
+        )
     else:
         print(
             f"Running tasks {config.start_index} to {end_index} (checkpoint path: {ckpt_path})"
-    )
+        )
     for i in range(config.num_trials):
         if config.task_ids and len(config.task_ids) > 0:
             idxs = config.task_ids
@@ -89,13 +105,28 @@ def run(config: RunConfig) -> List[EnvRunResult]:
                     trial=i,
                 )
             except Exception as e:
+                error_info = {
+                    "error": str(e),
+                    "traceback": traceback.format_exc(),
+                }
                 result = EnvRunResult(
                     task_id=idx,
                     reward=0.0,
-                    info={"error": str(e), "traceback": traceback.format_exc()},
+                    info=error_info,
                     traj=[],
                     trial=i,
                 )
+                # Log error to separate error file for easy review
+                with lock:
+                    with open(error_log_path, "a") as ef:
+                        error_entry = {
+                            "task_id": idx,
+                            "trial": i,
+                            "timestamp": datetime.now().isoformat(),
+                            "error": str(e),
+                            "traceback": traceback.format_exc(),
+                        }
+                        ef.write(json.dumps(error_entry) + "\n")
             print(
                 "✅" if result.reward == 1 else "❌",
                 f"task_id={idx}",
@@ -111,7 +142,9 @@ def run(config: RunConfig) -> List[EnvRunResult]:
                     json.dump(data + [result.model_dump()], f, indent=2)
             return result
 
-        with ThreadPoolExecutor(max_workers=config.max_concurrency) as executor:
+        with ThreadPoolExecutor(
+            max_workers=config.max_concurrency
+        ) as executor:
             res = list(executor.map(_run, idxs))
             results.extend(res)
 
@@ -119,7 +152,16 @@ def run(config: RunConfig) -> List[EnvRunResult]:
 
     with open(ckpt_path, "w") as f:
         json.dump([result.model_dump() for result in results], f, indent=2)
-        print(f"\n📄 Results saved to {ckpt_path}\n")
+        print(f"\n📄 Results saved to {ckpt_path}")
+
+    # Show error summary if any errors occurred
+    error_results = [r for r in results if "error" in r.info]
+    if error_results:
+        print(f"⚠️  {len(error_results)} task(s) failed with errors")
+        print(f"📋 Error log saved to {error_log_path}")
+        print("\nFailed task IDs:", [r.task_id for r in error_results])
+
+    print()
     return results
 
 
@@ -166,9 +208,14 @@ def agent_factory(
         )
     elif config.agent_strategy == "few-shot":
         from tau_bench.agents.few_shot_agent import FewShotToolCallingAgent
-        assert config.few_shot_displays_path is not None, "Few shot displays path is required for few-shot agent strategy"
+
+        assert config.few_shot_displays_path is not None, (
+            "Few shot displays path is required for few-shot agent strategy"
+        )
         with open(config.few_shot_displays_path, "r") as f:
-            few_shot_displays = [json.loads(line)["messages_display"] for line in f]
+            few_shot_displays = [
+                json.loads(line)["messages_display"] for line in f
+            ]
 
         return FewShotToolCallingAgent(
             tools_info=tools_info,
@@ -194,9 +241,13 @@ def display_metrics(results: List[EnvRunResult]) -> None:
     c_per_task_id: dict[int, int] = {}
     for result in results:
         if result.task_id not in c_per_task_id:
-            c_per_task_id[result.task_id] = 1 if is_successful(result.reward) else 0
+            c_per_task_id[result.task_id] = (
+                1 if is_successful(result.reward) else 0
+            )
         else:
-            c_per_task_id[result.task_id] += 1 if is_successful(result.reward) else 0
+            c_per_task_id[result.task_id] += (
+                1 if is_successful(result.reward) else 0
+            )
     pass_hat_ks: dict[int, float] = {}
     for k in range(1, num_trials + 1):
         sum_task_pass_hat_k = 0
