@@ -1,8 +1,12 @@
-"""Agent configurations for soft evals."""
+"""Agent configurations for memory/personalization evals.
+
+These agents are used specifically for memory task where user profile
+information is injected into the agent's system prompt.
+"""
 
 from . import general_assistant, idfc_main, dcs, tata_cap_sales, uc_scheduling
 
-# Registry of all available agents
+# Registry of all available agents for memory task
 AGENTS = {
     "general_assistant": general_assistant,
     "idfc_main": idfc_main,

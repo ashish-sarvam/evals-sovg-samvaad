@@ -12,6 +12,8 @@ sarvamai = "^0.1.22"
 pydub = "^0.25.1"
 tinker = "^0.8.0"
 tinker-cookbook = {path = "tinker-cookbook"}
+pyyaml = "^6.0"
+google-cloud-aiplatform = "^1.76.0"
 
 
 [build-system]

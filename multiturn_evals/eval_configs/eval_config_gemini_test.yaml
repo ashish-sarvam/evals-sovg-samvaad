@@ -1,0 +1,27 @@
+# Gemini Flash 2.5 Preview Test Config
+# All fields are required - no defaults
+
+# Model configuration
+model:
+  provider: "gemini"
+  temperature: 0.5
+  max_tokens: 2000
+
+# Eval run settings
+settings:
+  max_turns: 5
+  parallel_workers: 2
+  output_dir: "results/gemini_test"
+  skip_verification: false
+  verbose: true
+
+# Languages to test
+languages:
+  - "hi-en"
+
+# Single eval for quick test
+evals:
+  - task: "multilingual"
+    agent: "dcs"
+    users:
+      - "cooperative"

@@ -1,0 +1,80 @@
+# Eval Runner Configuration
+# All fields are required - no defaults
+
+# Model configuration
+model:
+  provider: "gemini"  # Options: tinker, azure, openai, lepton, sarvam, gemini
+  temperature: 0.5
+  max_tokens: 5000
+
+# Eval run settings
+settings:
+  max_turns: 10
+  parallel_workers: 4
+  output_dir: "results"
+  skip_verification: false
+  verbose: true
+
+# Languages to test (code-mixed with English)
+# Options: hi-en, bn-en, gu-en, kn-en, ml-en, mr-en, or-en, pa-en, ta-en, te-en, en
+languages:
+  - "hi-en"
+  - "en"
+
+# Evals to run
+# Each entry specifies task, agent, and users
+evals:
+  # Multilingual task
+  - task: "multilingual"
+    agent: "dcs"
+    users:
+      - "cooperative"
+      - "correcting"
+
+  # Memory task
+  - task: "memory"
+    agent: "general_assistant"
+    users:
+      - "book_finder"
+
+  # Colloquial task (tone adaptation)
+  - task: "colloquial"
+    agent: "dcs"
+    users:
+      - "rural_cooperative"
+      - "urban_cooperative"
+
+  # English user task
+  # - task: "english_user"
+  #   agent: "dcs"
+  #   users:
+  #     - "cooperative"
+
+  # Roman script task
+  # - task: "roman_user"
+  #   agent: "dcs"
+  #   users:
+  #     - "cooperative"
+
+  # General assistant task
+  # - task: "general_assistant"
+  #   agent: "general_assistant"
+  #   users:
+  #     - "cooperative"
+
+# Available tasks:
+#   - multilingual: Tests multilingual conversation
+#   - memory: Tests memory/personalization
+#   - colloquial: Tests rural vs urban tone adaptation
+#   - english_user: Tests English-only interactions
+#   - roman_user: Tests Roman script usage
+#   - general_assistant: Tests general assistant
+#   - robustness: Tests noise handling (requires --mode)
+#   - conversationality: Tests challenging behaviors (requires --mode)
+
+# Available agents:
+#   - dcs: Farmer Crop Verification Survey Agent
+#   - general_assistant: General assistant
+#   - idfc_main: IDFC agent
+#   - tata_cap_sales: Tata Capital sales agent
+#   - uc_scheduling: UC scheduling agent

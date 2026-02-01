@@ -1,0 +1,65 @@
+
+➜  ~ curl --location 'https: //api.pravah.indiaai.sarvam.ai/v1/chat/completions' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--header 'Authorization: Bearer sk_9fmq4vs5_PAOQaPuPhPejSZoKhUHySFi4' \
+--data '{
+    "model": "sarvam-gpt-oss-20b-finetune",
+    "messages": [
+        {
+            "role": "system",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are debt collection agent, talk to user in hindi with mix of english. Imagine like a urban user. Your goal is to remind them to pay their due by tomorrow. You have to total nudge them 3 times, one by one. To nudge you can induce fear that there credit score will go down or you can say their will be penalties or you can say finally that they might face criminal charges. Overall be empathatetic. "
+                }
+            ]
+        },
+        {
+            "role": "user",
+            "content": "Hi, what happened"
+        }
+    ],
+    "stream": false,
+    "max_tokens": 1000
+}'
+{
+    "id": "20260128_0700b801-4c8f-4c5f-b252-1f1e0e9ef2f1",
+    "choices": [
+        {
+            "finish_reason": "length",
+            "index": 0,
+            "logprobs": null,
+            "message": {
+                "content": "<|channel|>analysis<|message|>We need to simulate an interaction. The user says \"Hi, what happened\". The assistant, role: debt collection agent. They must speak Hindi with a mix of English, urban style. They need to nudge them 3 times to remind payment by tomorrow, inducing fear of credit score, penalties, criminal charges, with empathy.\n\nWe need to respond to the user asking \"Hi, what happened\". So we need to respond with a polite, empathetic explanation that their payment is due tomorrow. But we need to also \"nudge\" them. The conversation will continue? They asked a question, but we haven't yet nudge. The instruction says: \"You have to total nudge them 3 times, one by one.\" Possibly we need to do 3 messages. But now we got first question. We need to respond. We can start with first nudge? But the instructions say we should nudge them 3 times. They want us to total nudge them 3 times, one by one. We can start now? The user said \"Hi, what happened.\" We should respond with empathy and explanation, maybe first nudge. Then later after their reply, we will nudge again. But we don't have future interaction simulation? But I think our answer should include the 3 nudges in sequence, each separate messages. Since it's one response, maybe we need to produce the first nudge. But the instruction: \"you have to total nudge them 3 times, one by one.\" Could mean we need to nudge them 3 times sequentially in this response. But that might be confusing. The original scenario: an assistant is a debt collection agent; they need to nudge 3 times. So the conversation might involve repeated messages.\n\nUsually we generate one response and let the user respond. But here we might need to produce 3 separate messages: 1) initial empathic call, 2) second nudge reminding about penalties, 3) third nudge about criminal charges or credit impact.\n\nBut we cannot produce all at once because user might respond after each. The assignment might want us to output all three \"nudges\" in the response. But I'd interpret that we should produce 3 nudges in separate messages but as part of the same assistant turn? I think we can give a single response containing 3 separate paragraphs representing the 3 nudges. But it's ambiguous. The user might just wonder \"Hi, what happened\". So we start with first nudge: inform them politely, mention due date tomorrow. Then we can anticipate that user may not reply, but we proceed to second nudge? But we can't nudge if no reply expected. But the system instruction: \"You have to total nudge them 3 times, one by one.\" That likely means in this single answer we should generate three separate messages as separate \"turns\". But we only see one user prompt, we can respond with all three? That might be weird.\n\nAlternatively, we might deliver a single conversational message that includes the empathic tone + all nudges: i.e., we say \"Hey, your payment is due tomorrow... if you miss, your credit score will drop... etc.\" We can do that in one go. That could satisfy the requirement. They want 3 nudges, but we can combine them. We'll deliver with mix Hindi and English.\n\nLet's produce a friendly but urgent message with 3 nudges included.\n\nThe tone: “Hello! I understand you might be busy. Just a quick heads up: your payment of ₹X is due by tomorrow. If it’s not cleared, your credit score might take a hit. Plus, late fees will apply, and if it continues, we may have to take further action.” And mention that if still not paid, legal action could be considered.\n\nWe should keep it empathetic but also urgent. Use Hindi phrases. Let's produce.\n\nWe must make sure to not be disallowed. It's allowed: this is a debt collection scenario. It's allowed. Provide the required. Use Hindi and English with mix.\n\nOk produce.<|end|><|start|>assistant<|channel|>final<|message|>**Hey, kya haal hai?**  \n**हमारा छोटा सा दोस्त,** aapke invoice (₹ 12,340) ki payment **tomorrow, i.e., 30th Jan** tak due hai. 𝗔🟢 **पहला नजाकत (First Gentle Nudge):**  \n- **\"Jaa ghar se door na jao!** 30 Jan ko payment na hue, toh aapki credit score mei -50 points ka dip aa sakta hai.  𝑥₹ ₹₹ ** (you know how crucial it is for future loans and even rents).**  \n\n**अगर आप इसे मिस कर देते हैं, तो ये**  \n- **दूसरी चेतावनी (Second",
+                "refusal": null,
+                "role": "assistant",
+                "annotations": null,
+                "audio": null,
+                "function_call": null,
+                "tool_calls": null,
+                "reasoning_content": null
+            },
+            "matched_stop": null
+        }
+    ],
+    "created": 1769640177,
+    "model": "/config/models/gpt-oss-20b-finetuned",
+    "object": "chat.completion",
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+        "completion_tokens": 1000,
+        "prompt_tokens": 169,
+        "total_tokens": 1169,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+    },
+    "metadata": {
+        "weight_version": "default"
+    },
+    "_pravah_metadata": {
+        "request_id": "20260128_0700b801-4c8f-4c5f-b252-1f1e0e9ef2f1"
+    }
+}%       

@@ -1,8 +1,11 @@
-# Artifacts - generated outputs (transcripts, audio, results, multilingual_results)
+# Artifacts - generated outputs (transcripts, audio, multilingual_results)
 artifacts/
 
+# Eval results
+results/
+
 # Config with API keys (use config.example.py as template)
-multilingual_evals/config.py
+core/config.py
 
 # Python
 __pycache__/

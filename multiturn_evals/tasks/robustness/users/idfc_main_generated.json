@@ -1,0 +1,504 @@
+{
+  "agent_name": "emi_collection_call_agent_idfc",
+  "total_blueprints": 20,
+  "buckets_summary": {
+    "noise_opening": 3,
+    "noise_slot": 3,
+    "interruption_return": 3,
+    "partial_confirmation": 3,
+    "confusion": 4,
+    "repeated_perturbation": 4
+  },
+  "blueprints": [
+    {
+      "name": "noise_opening_cant_hear_name",
+      "bucket": "noise_opening",
+      "tags": [
+        "noise",
+        "opening",
+        "identity_verification"
+      ],
+      "difficulty": "medium",
+      "description": "User cannot hear agent's name clearly at call start",
+      "perturbation_turn": 1,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "User picks up call with static noise - 'Hello? Hello?'",
+        "User asks - 'Kaun bol raha hai? Naam samajh nahi aaya'",
+        "Agent repeats name and bank clearly",
+        "User confirms and proceeds with identity verification"
+      ],
+      "expected_state_at_perturbation": "Agent greeting and introducing self",
+      "expected_recovery": "Agent should repeat only name and bank, then continue identity check",
+      "failure_indicators": [
+        "Agent restarts entire script",
+        "Agent skips identity verification",
+        "Agent repeats same sentence multiple times",
+        "Agent jumps directly to payment discussion"
+      ]
+    },
+    {
+      "name": "noise_opening_cant_hear_bank",
+      "bucket": "noise_opening",
+      "tags": [
+        "noise",
+        "opening",
+        "organization"
+      ],
+      "difficulty": "medium",
+      "description": "User cannot hear which bank the agent is calling from",
+      "perturbation_turn": 1,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "User answers call with traffic noise",
+        "User says - 'Bank kaunsa bola? Clear nahi aaya'",
+        "Agent repeats only bank name slowly",
+        "User acknowledges and continues"
+      ],
+      "expected_state_at_perturbation": "Opening introduction",
+      "expected_recovery": "Agent should clarify bank name without restarting flow",
+      "failure_indicators": [
+        "Agent repeats full intro word-for-word",
+        "Agent becomes defensive",
+        "Agent skips confirming customer identity"
+      ]
+    },
+    {
+      "name": "noise_opening_background_noise",
+      "bucket": "noise_opening",
+      "tags": [
+        "noise",
+        "opening",
+        "background"
+      ],
+      "difficulty": "hard",
+      "description": "Heavy background noise prevents hearing purpose of call",
+      "perturbation_turn": 1,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "User answers call from crowded place",
+        "User says - 'Awaaz bahut shor hai, purpose samajh nahi aaya'",
+        "Agent briefly repeats purpose of call",
+        "User asks agent to continue"
+      ],
+      "expected_state_at_perturbation": "Purpose explanation after greeting",
+      "expected_recovery": "Agent should re-explain purpose concisely",
+      "failure_indicators": [
+        "Agent ignores noise issue",
+        "Agent restarts from greeting",
+        "Agent proceeds without confirmation"
+      ]
+    },
+    {
+      "name": "noise_slot_cant_hear_amount",
+      "bucket": "noise_slot",
+      "tags": [
+        "noise",
+        "payment",
+        "amount"
+      ],
+      "difficulty": "medium",
+      "description": "User cannot hear overdue amount clearly",
+      "perturbation_turn": 3,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Identity confirmed successfully",
+        "Agent mentions overdue EMI amount",
+        "User says - 'Amount kya bola? 5... kya?'",
+        "Agent repeats only the amount"
+      ],
+      "expected_state_at_perturbation": "Payment intimation stage",
+      "expected_recovery": "Agent should repeat only amount, not identity or purpose",
+      "failure_indicators": [
+        "Agent restarts call flow",
+        "Agent changes amount",
+        "Agent skips payment guidance"
+      ]
+    },
+    {
+      "name": "noise_slot_partial_hearing_days",
+      "bucket": "noise_slot",
+      "tags": [
+        "noise",
+        "payment",
+        "delay"
+      ],
+      "difficulty": "medium",
+      "description": "User partially hears number of overdue days",
+      "perturbation_turn": 3,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent explains EMI is overdue",
+        "User interrupts - '10... ya 2... samajh nahi aaya'",
+        "Agent repeats only overdue days clearly",
+        "User acknowledges"
+      ],
+      "expected_state_at_perturbation": "Payment intimation",
+      "expected_recovery": "Agent should clarify missed number only",
+      "failure_indicators": [
+        "Agent restarts explanation",
+        "Agent gives inconsistent information"
+      ]
+    },
+    {
+      "name": "noise_slot_signal_dies_mid_sentence",
+      "bucket": "noise_slot",
+      "tags": [
+        "noise",
+        "mid_sentence"
+      ],
+      "difficulty": "hard",
+      "description": "Signal drops while agent explains payment link",
+      "perturbation_turn": 4,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent explains payment link sent via SMS",
+        "Signal drops suddenly",
+        "User returns - 'Last line cut gaya, kya bola?'",
+        "Agent resumes from exact cut point"
+      ],
+      "expected_state_at_perturbation": "Payment intimation",
+      "expected_recovery": "Agent should resume from last incomplete sentence",
+      "failure_indicators": [
+        "Agent restarts entire explanation",
+        "Agent skips link guidance"
+      ]
+    },
+    {
+      "name": "interruption_return_short_pause",
+      "bucket": "interruption_return",
+      "tags": [
+        "interruption",
+        "resume"
+      ],
+      "difficulty": "medium",
+      "description": "User briefly interrupted and returns",
+      "perturbation_turn": 4,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent guiding payment step",
+        "User says - 'Ek second rukna'",
+        "User returns - 'Haan ji, kya bol rahe the?'",
+        "Agent resumes same step"
+      ],
+      "expected_state_at_perturbation": "Payment guidance step",
+      "expected_recovery": "Agent resumes current step without restarting",
+      "failure_indicators": [
+        "Agent restarts payment flow",
+        "Agent repeats identity verification"
+      ]
+    },
+    {
+      "name": "interruption_return_long_pause_forgets",
+      "bucket": "interruption_return",
+      "tags": [
+        "interruption",
+        "context_loss"
+      ],
+      "difficulty": "hard",
+      "description": "User returns after long interruption and forgets context",
+      "perturbation_turn": 4,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent guiding payment",
+        "User goes silent for long time",
+        "User returns - 'Sorry, hum kya discuss kar rahe the?'",
+        "Agent summarizes briefly and continues"
+      ],
+      "expected_state_at_perturbation": "Mid payment guidance",
+      "expected_recovery": "Agent should summarize and resume correct step",
+      "failure_indicators": [
+        "Agent restarts from greeting",
+        "Agent skips steps"
+      ]
+    },
+    {
+      "name": "interruption_return_multiple_mini",
+      "bucket": "interruption_return",
+      "tags": [
+        "interruption",
+        "multiple"
+      ],
+      "difficulty": "hard",
+      "description": "User has multiple short interruptions",
+      "perturbation_turn": 5,
+      "perturbation_count": 2,
+      "behavior_steps": [
+        "Agent asks user to select payment method",
+        "User says - 'Ruk ruk, doorbell'",
+        "User returns then again pauses",
+        "Agent patiently resumes same step"
+      ],
+      "expected_state_at_perturbation": "Payment guidance",
+      "expected_recovery": "Agent maintains state and patience",
+      "failure_indicators": [
+        "Agent loses track of step",
+        "Agent shows frustration"
+      ]
+    },
+    {
+      "name": "partial_confirmation_asks_agent_name",
+      "bucket": "partial_confirmation",
+      "tags": [
+        "confirmation",
+        "tangent"
+      ],
+      "difficulty": "medium",
+      "description": "User confirms info but asks agent name mid-way",
+      "perturbation_turn": 2,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "User confirms identity",
+        "User adds - 'Waise aapka naam kya tha?'",
+        "Agent answers name briefly",
+        "Agent returns to payment intimation"
+      ],
+      "expected_state_at_perturbation": "Identity confirmation complete",
+      "expected_recovery": "Agent answers tangent and resumes task",
+      "failure_indicators": [
+        "Agent gets stuck on name discussion",
+        "Agent restarts verification"
+      ]
+    },
+    {
+      "name": "partial_confirmation_data_source_query",
+      "bucket": "partial_confirmation",
+      "tags": [
+        "confirmation",
+        "suspicion"
+      ],
+      "difficulty": "hard",
+      "description": "User confirms but asks where data came from",
+      "perturbation_turn": 3,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "User agrees EMI is pending",
+        "User asks - 'Ye data aapko kahan se mila?'",
+        "Agent gives brief reassurance",
+        "Agent continues payment discussion"
+      ],
+      "expected_state_at_perturbation": "Payment intimation",
+      "expected_recovery": "Agent reassures without derailing flow",
+      "failure_indicators": [
+        "Agent becomes defensive",
+        "Agent abandons payment flow"
+      ]
+    },
+    {
+      "name": "partial_confirmation_scam_check",
+      "bucket": "partial_confirmation",
+      "tags": [
+        "confirmation",
+        "scam_check"
+      ],
+      "difficulty": "hard",
+      "description": "User suspects scam mid-confirmation",
+      "perturbation_turn": 3,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "User acknowledges overdue EMI",
+        "User asks - 'Ye scam toh nahi hai na?'",
+        "Agent reassures with bank identity",
+        "Agent returns to payment steps"
+      ],
+      "expected_state_at_perturbation": "Payment intimation",
+      "expected_recovery": "Agent reassures and continues logically",
+      "failure_indicators": [
+        "Agent argues",
+        "Agent restarts entire call"
+      ]
+    },
+    {
+      "name": "confusion_verify_term",
+      "bucket": "confusion",
+      "tags": [
+        "confusion",
+        "verification"
+      ],
+      "difficulty": "medium",
+      "description": "User does not understand term 'verify'",
+      "perturbation_turn": 2,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent asks to confirm identity",
+        "User asks - 'Verify matlab kya?'",
+        "Agent explains simply",
+        "User proceeds"
+      ],
+      "expected_state_at_perturbation": "Identity confirmation",
+      "expected_recovery": "Agent explains clearly in simple terms",
+      "failure_indicators": [
+        "Agent repeats same word",
+        "Agent sounds impatient"
+      ]
+    },
+    {
+      "name": "confusion_purpose_of_call",
+      "bucket": "confusion",
+      "tags": [
+        "confusion",
+        "purpose"
+      ],
+      "difficulty": "medium",
+      "description": "User does not understand purpose of call",
+      "perturbation_turn": 2,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent introduces call",
+        "User says - 'Samjha nahi, aap chahte kya ho?'",
+        "Agent explains purpose clearly",
+        "User responds"
+      ],
+      "expected_state_at_perturbation": "Opening explanation",
+      "expected_recovery": "Agent clarifies without repeating entire script",
+      "failure_indicators": [
+        "Agent loops explanation",
+        "Agent skips identity check"
+      ]
+    },
+    {
+      "name": "confusion_suspicious_user",
+      "bucket": "confusion",
+      "tags": [
+        "confusion",
+        "suspicion"
+      ],
+      "difficulty": "hard",
+      "description": "User is suspicious and asks for proof",
+      "perturbation_turn": 3,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent explains EMI overdue",
+        "User says - 'Proof kya hai?'",
+        "Agent explains SMS/WhatsApp link",
+        "Agent continues"
+      ],
+      "expected_state_at_perturbation": "Payment intimation",
+      "expected_recovery": "Agent reassures with available info",
+      "failure_indicators": [
+        "Agent gives forbidden details",
+        "Agent becomes aggressive"
+      ]
+    },
+    {
+      "name": "confusion_elderly_user",
+      "bucket": "confusion",
+      "tags": [
+        "confusion",
+        "elderly"
+      ],
+      "difficulty": "hard",
+      "description": "Elderly user repeatedly confused",
+      "perturbation_turn": 2,
+      "perturbation_count": 2,
+      "behavior_steps": [
+        "Agent explains purpose",
+        "User says - 'Beta, samajh nahi aa raha'",
+        "Agent simplifies explanation",
+        "User slowly understands"
+      ],
+      "expected_state_at_perturbation": "Opening explanation",
+      "expected_recovery": "Agent shows patience and clarity",
+      "failure_indicators": [
+        "Agent rushes",
+        "Agent repeats jargon"
+      ]
+    },
+    {
+      "name": "repeated_perturbation_two_noise_issues",
+      "bucket": "repeated_perturbation",
+      "tags": [
+        "noise",
+        "repetition"
+      ],
+      "difficulty": "hard",
+      "description": "User faces two separate noise issues",
+      "perturbation_turn": 2,
+      "perturbation_count": 2,
+      "behavior_steps": [
+        "User cannot hear intro",
+        "Later cannot hear amount",
+        "User expresses frustration",
+        "Agent offers callback"
+      ],
+      "expected_state_at_perturbation": "Mid call",
+      "expected_recovery": "Agent should offer callback politely",
+      "failure_indicators": [
+        "Agent ignores repeated issues",
+        "Agent continues forcefully"
+      ]
+    },
+    {
+      "name": "repeated_perturbation_noise_and_interrupt",
+      "bucket": "repeated_perturbation",
+      "tags": [
+        "noise",
+        "interruption"
+      ],
+      "difficulty": "hard",
+      "description": "Mixed noise and interruption issues",
+      "perturbation_turn": 3,
+      "perturbation_count": 2,
+      "behavior_steps": [
+        "User cannot hear clearly",
+        "User interrupted by another call",
+        "Returns confused",
+        "Agent offers callback"
+      ],
+      "expected_state_at_perturbation": "Payment intimation",
+      "expected_recovery": "Agent offers callback after second issue",
+      "failure_indicators": [
+        "Agent restarts flow",
+        "Agent shows impatience"
+      ]
+    },
+    {
+      "name": "repeated_perturbation_escalating_frustration",
+      "bucket": "repeated_perturbation",
+      "tags": [
+        "noise",
+        "frustration"
+      ],
+      "difficulty": "hard",
+      "description": "User increasingly frustrated due to signal",
+      "perturbation_turn": 4,
+      "perturbation_count": 3,
+      "behavior_steps": [
+        "User misses info multiple times",
+        "User says - 'Network bahut kharab hai'",
+        "Agent empathizes",
+        "Agent offers callback"
+      ],
+      "expected_state_at_perturbation": "Payment guidance",
+      "expected_recovery": "Agent offers callback empathetically",
+      "failure_indicators": [
+        "Agent continues without offering callback",
+        "Agent argues"
+      ]
+    },
+    {
+      "name": "repeated_perturbation_user_requests_callback",
+      "bucket": "repeated_perturbation",
+      "tags": [
+        "noise",
+        "callback"
+      ],
+      "difficulty": "medium",
+      "description": "User directly asks for callback after multiple issues",
+      "perturbation_turn": 4,
+      "perturbation_count": 2,
+      "behavior_steps": [
+        "User experiences noise twice",
+        "User asks - 'Baad mein call kar lo'",
+        "Agent agrees and closes politely",
+        "Call ends"
+      ],
+      "expected_state_at_perturbation": "Mid call",
+      "expected_recovery": "Agent should agree and end call gracefully",
+      "failure_indicators": [
+        "Agent refuses callback",
+        "Agent continues pushing payment"
+      ]
+    }
+  ]
+}

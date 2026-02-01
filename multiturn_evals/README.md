@@ -23,6 +23,7 @@ cp multilingual_evals/config.example.py multilingual_evals/config.py
 | `english_user` | Test language maintenance when user speaks English |
 | `colloquial` | Test rural vs urban tone adaptation |
 | `conversationality` | Test conversational robustness with challenging users |
+| `robustness` | Test repetition handling, state continuity, no looping |
 
 ## Quick Commands
 
@@ -76,6 +77,49 @@ poetry run python -m multilingual_evals --task conversationality --agent dcs --m
 poetry run python -m multilingual_evals --task conversationality --agent dcs --mode results
 ```
 
+### 5. Robustness Task
+
+Test how well agent handles noise, interruptions, and repetition requests without looping:
+
+```bash
+# Step 1: Generate ~20 blueprints across 6 buckets (one-time)
+poetry run python -m multilingual_evals --task robustness --agent dcs --mode generate-blueprints
+
+# Step 2: Generate trajectories
+# All blueprints
+poetry run python -m multilingual_evals --task robustness --agent dcs --mode generate --model tinker
+
+# Single bucket only
+poetry run python -m multilingual_evals --task robustness --agent dcs --mode generate --model tinker --bucket noise_opening
+
+# Specific blueprints
+poetry run python -m multilingual_evals --task robustness --agent dcs --mode generate --model tinker --user noise_opening_cant_hear_name
+
+# Step 3: Run LLM evaluation
+poetry run python -m multilingual_evals --task robustness --agent dcs --mode evaluate -p 10
+
+# Step 4: View results
+poetry run python -m multilingual_evals --task robustness --agent dcs --mode results
+```
+
+**Robustness Buckets:**
+| Bucket | Description |
+|--------|-------------|
+| `noise_opening` | Bad signal from START of call |
+| `noise_slot` | Bad signal during specific questions (survey/crop) |
+| `interruption_return` | User gets interrupted, returns |
+| `partial_confirmation` | Confirms but asks unrelated mid-answer |
+| `confusion` | Doesn't understand purpose |
+| `repeated_perturbation` | Multiple issues → should offer callback |
+
+**Evaluation Criteria:**
+- **No Unnecessary Reset**: Did agent avoid restarting from scratch?
+- **Repair Quality**: Did agent repeat only what was missed?
+- **State Continuity**: Did agent resume from correct step?
+- **Over-asking Efficiency**: Did agent avoid re-asking confirmed info?
+- **Looping Detection**: Did agent get stuck in loops?
+- **Callback Offer**: Did agent offer callback after multiple issues?
+
 ## Model Providers
 
 Use `--model` to specify the agent model:
@@ -99,6 +143,8 @@ Use `--model` to specify the agent model:
 --skip-verification  # Skip verification step
 --verbose            # Show detailed output
 --temperature TEMP   # Override agent temperature
+--bucket BUCKET      # For robustness task: filter by test bucket
+--mode MODE          # For conversationality/robustness: generate-blueprints, generate, evaluate, results
 ```
 
 ## Output Structure

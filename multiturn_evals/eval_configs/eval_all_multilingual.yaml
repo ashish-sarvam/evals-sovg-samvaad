@@ -1,0 +1,99 @@
+# =============================================================================
+# COMPREHENSIVE EVAL CONFIG
+# ALL tasks × ALL agents × ALL users × ALL languages (EXPLICIT)
+# =============================================================================
+# Run with: python run_evals.py --config eval_configs/eval_all_multilingual.yaml
+# =============================================================================
+
+model:
+  provider: gemini
+  temperature: 0.5
+  max_tokens: 1024
+
+settings:
+  max_turns: 3
+  parallel_workers: 100
+  output_dir: results/comprehensive
+  skip_verification: false
+  verbose: true
+
+evals:
+  # ===========================================================================
+  # TASK: multilingual
+  # Tests: Agent responds in NATIVE SCRIPT
+  # ===========================================================================
+  
+  - task: multilingual
+    agent: dcs
+    users: [cooperative, correcting, busy, confused]
+    languages: [hi-en, bn-en, ta-en, te-en, kn-en, ml-en, mr-en, gu-en, pa-en, or-en]
+
+  - task: multilingual
+    agent: idfc_main
+    users: [cooperative, correcting, confused]
+    languages: [hi-en, bn-en, ta-en, te-en, kn-en, ml-en, mr-en, gu-en, pa-en, or-en]
+
+  # - task: multilingual
+  #   agent: tata_cap_sales
+  #   users: [cooperative, busy, confused, correcting]
+  #   languages: [hi-en, bn-en, ta-en, te-en, kn-en, ml-en, mr-en, gu-en, pa-en, or-en]
+
+  # - task: multilingual
+  #   agent: uc_scheduling
+  #   users: [cooperative, busy, confused, correcting]
+  #   languages: [hi-en, bn-en, ta-en, te-en, kn-en, ml-en, mr-en, gu-en, pa-en, or-en]
+
+  # - task: multilingual
+  #   agent: assistant
+  #   users: [hindi, bengali, tamil, telugu, kannada, malayalam, marathi, gujarati, punjabi, odia]
+  #   languages: [hi-en, bn-en, ta-en, te-en, kn-en, ml-en, mr-en, gu-en, pa-en, or-en]
+
+  # ===========================================================================
+  # TASK: english_user
+  # Tests: User speaks ENGLISH, agent responds in native language
+  # ===========================================================================
+  
+  - task: english_user
+    agent: dcs
+    users: [cooperative, correcting, busy, confused]
+    languages: [hi-en, bn-en, ta-en, te-en, kn-en, ml-en, mr-en, gu-en, pa-en, or-en]
+
+  # - task: english_user
+  #   agent: idfc_main
+  #   users: [cooperative, correcting, confused]
+  #   languages: [hi-en, bn-en, ta-en, te-en, kn-en, ml-en, mr-en, gu-en, pa-en, or-en]
+
+  # - task: english_user
+  #   agent: tata_cap_sales
+  #   users: [cooperative, busy, confused, correcting]
+  #   languages: [hi-en, bn-en, ta-en, te-en, kn-en, ml-en, mr-en, gu-en, pa-en, or-en]
+
+  # - task: english_user
+  #   agent: uc_scheduling
+  #   users: [cooperative, busy, confused, correcting]
+  #   languages: [hi-en, bn-en, ta-en, te-en, kn-en, ml-en, mr-en, gu-en, pa-en, or-en]
+
+  # ===========================================================================
+  # TASK: colloquial
+  # Tests: Rural (formal) vs Urban (casual) language style
+  # ===========================================================================
+  
+  - task: colloquial
+    agent: dcs
+    users: [rural_cooperative, urban_cooperative, rural_correcting, urban_correcting, rural_busy, urban_busy, rural_confused, urban_confused]
+    languages: [hi-en, bn-en, ta-en, te-en, kn-en, ml-en, mr-en, gu-en, pa-en, or-en]
+
+  # - task: colloquial
+  #   agent: idfc_main
+  #   users: [rural_cooperative, urban_cooperative, rural_correcting, urban_correcting, rural_confused, urban_confused]
+  #   languages: [hi-en, bn-en, ta-en, te-en, kn-en, ml-en, mr-en, gu-en, pa-en, or-en]
+
+  # - task: colloquial
+  #   agent: tata_cap_sales
+  #   users: [rural_cooperative, urban_cooperative, rural_busy, urban_busy, rural_confused, urban_confused, rural_correcting, urban_correcting]
+  #   languages: [hi-en, bn-en, ta-en, te-en, kn-en, ml-en, mr-en, gu-en, pa-en, or-en]
+
+  # - task: colloquial
+  #   agent: uc_scheduling
+  #   users: [rural_cooperative, urban_cooperative, rural_busy, urban_busy, rural_confused, urban_confused, rural_correcting, urban_correcting]
+  #   languages: [hi-en, bn-en, ta-en, te-en, kn-en, ml-en, mr-en, gu-en, pa-en, or-en]

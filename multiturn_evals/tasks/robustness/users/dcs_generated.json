@@ -1,0 +1,552 @@
+{
+  "agent_name": "Divya",
+  "total_blueprints": 20,
+  "buckets_summary": {
+    "noise_opening": 3,
+    "noise_slot": 3,
+    "interruption_return": 3,
+    "partial_confirmation": 3,
+    "confusion": 4,
+    "repeated_perturbation": 4
+  },
+  "blueprints": [
+    {
+      "name": "noise_opening_cant_hear_name",
+      "bucket": "noise_opening",
+      "tags": [
+        "noise",
+        "opening",
+        "identity_verification"
+      ],
+      "difficulty": "medium",
+      "description": "User cannot hear agent's name clearly at call start due to bad signal",
+      "perturbation_turn": 1,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "User picks up and says 'Hello? Hello? Kaun bol raha hai?'",
+        "User says they cannot hear the agent's name clearly",
+        "Agent repeats only name and identity slowly",
+        "User confirms and agrees to continue",
+        "Call proceeds with survey verification"
+      ],
+      "expected_state_at_perturbation": "Agent greeting and identity introduction",
+      "expected_recovery": "Agent repeats only name and ministry clearly and then reconfirms user identity",
+      "failure_indicators": [
+        "Agent restarts entire script",
+        "Agent skips confirming user name",
+        "Agent proceeds to survey without identity confirmation"
+      ]
+    },
+    {
+      "name": "noise_opening_cant_hear_ministry",
+      "bucket": "noise_opening",
+      "tags": [
+        "noise",
+        "opening",
+        "organization"
+      ],
+      "difficulty": "medium",
+      "description": "User cannot hear which ministry the agent is calling from",
+      "perturbation_turn": 1,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "User answers call with background noise",
+        "User says 'Ministry? Kaunsi ministry? Samajh nahi aaya'",
+        "Agent repeats only Ministry of Agriculture, Government of India",
+        "User acknowledges and continues",
+        "Agent proceeds with confirmation of farmer identity"
+      ],
+      "expected_state_at_perturbation": "Agent stating organization",
+      "expected_recovery": "Agent clarifies ministry once without repeating full greeting",
+      "failure_indicators": [
+        "Agent ignores confusion and moves ahead",
+        "Agent repeats entire opener unnecessarily",
+        "Agent becomes rigid or impatient"
+      ]
+    },
+    {
+      "name": "noise_opening_background_static",
+      "bucket": "noise_opening",
+      "tags": [
+        "noise",
+        "opening",
+        "audio_issue"
+      ],
+      "difficulty": "hard",
+      "description": "Heavy background static and traffic noise from beginning",
+      "perturbation_turn": 1,
+      "perturbation_count": 2,
+      "behavior_steps": [
+        "User picks up with traffic noise",
+        "User says 'Awaaz bahut kat rahi hai'",
+        "Agent checks audio issue and speaks slowly",
+        "User asks to repeat purpose briefly",
+        "Agent clarifies purpose and continues"
+      ],
+      "expected_state_at_perturbation": "Initial greeting and purpose explanation",
+      "expected_recovery": "Agent acknowledges noise and repeats only missed information",
+      "failure_indicators": [
+        "Agent does not check for audio clarity",
+        "Agent rushes through script",
+        "Agent skips purpose explanation"
+      ]
+    },
+    {
+      "name": "noise_slot_cant_hear_survey_number",
+      "bucket": "noise_slot",
+      "tags": [
+        "noise",
+        "survey_number",
+        "verification"
+      ],
+      "difficulty": "medium",
+      "description": "User cannot hear the survey number clearly",
+      "perturbation_turn": 3,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Call starts smoothly and identity is confirmed",
+        "Agent asks about survey number 432",
+        "User says '4... kya? Dobara boliye'",
+        "Agent repeats only survey number and village",
+        "User confirms crop details"
+      ],
+      "expected_state_at_perturbation": "Asking survey-specific question",
+      "expected_recovery": "Agent repeats only the survey number context",
+      "failure_indicators": [
+        "Agent restarts from greeting",
+        "Agent skips survey number",
+        "Agent asks a different survey"
+      ]
+    },
+    {
+      "name": "noise_slot_cant_hear_crop_name",
+      "bucket": "noise_slot",
+      "tags": [
+        "noise",
+        "crop",
+        "verification"
+      ],
+      "difficulty": "medium",
+      "description": "User cannot hear the crop name clearly",
+      "perturbation_turn": 3,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent asks if Magfali crop is correct",
+        "User says 'Mag... kya bola? Samajh nahi aaya'",
+        "Agent repeats only crop name clearly",
+        "User confirms crop",
+        "Agent moves to next survey"
+      ],
+      "expected_state_at_perturbation": "Crop confirmation",
+      "expected_recovery": "Agent repeats crop name slowly and clearly",
+      "failure_indicators": [
+        "Agent changes crop name",
+        "Agent restarts entire survey",
+        "Agent proceeds without confirmation"
+      ]
+    },
+    {
+      "name": "noise_slot_signal_drops_mid_sentence",
+      "bucket": "noise_slot",
+      "tags": [
+        "noise",
+        "signal_drop",
+        "context"
+      ],
+      "difficulty": "hard",
+      "description": "Signal drops mid-sentence while explaining survey context",
+      "perturbation_turn": 4,
+      "perturbation_count": 2,
+      "behavior_steps": [
+        "Agent explains survey 436 details",
+        "Signal drops and user misses half sentence",
+        "User says 'Ruk ruk, kya bola abhi?'",
+        "Agent resumes from last incomplete sentence",
+        "User confirms crop"
+      ],
+      "expected_state_at_perturbation": "Mid survey explanation",
+      "expected_recovery": "Agent resumes from last incomplete point only",
+      "failure_indicators": [
+        "Agent restarts from first survey",
+        "Agent skips explanation entirely",
+        "Agent loses survey sequence"
+      ]
+    },
+    {
+      "name": "interruption_return_short_pause",
+      "bucket": "interruption_return",
+      "tags": [
+        "interruption",
+        "resume",
+        "context"
+      ],
+      "difficulty": "medium",
+      "description": "User has a brief interruption and returns",
+      "perturbation_turn": 4,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "User cooperates initially",
+        "User says 'Ek second...' and pauses",
+        "User returns saying 'Haan ji, kya bol rahe the?'",
+        "Agent resumes from same survey question",
+        "Verification continues"
+      ],
+      "expected_state_at_perturbation": "Survey crop confirmation",
+      "expected_recovery": "Agent resumes last unanswered question",
+      "failure_indicators": [
+        "Agent restarts entire call",
+        "Agent skips survey",
+        "Agent gets confused"
+      ]
+    },
+    {
+      "name": "interruption_return_long_pause_forgets_context",
+      "bucket": "interruption_return",
+      "tags": [
+        "interruption",
+        "memory",
+        "resume"
+      ],
+      "difficulty": "hard",
+      "description": "User returns after long interruption and forgets context",
+      "perturbation_turn": 5,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent is verifying second survey",
+        "User leaves due to another call",
+        "User returns saying 'Hum kya discuss kar rahe the?'",
+        "Agent briefly recaps current survey",
+        "Continues verification"
+      ],
+      "expected_state_at_perturbation": "Midway through survey list",
+      "expected_recovery": "Agent gives brief context and resumes correct survey",
+      "failure_indicators": [
+        "Agent starts from greeting",
+        "Agent skips recap",
+        "Agent repeats already verified surveys"
+      ]
+    },
+    {
+      "name": "interruption_return_multiple_mini_interruptions",
+      "bucket": "interruption_return",
+      "tags": [
+        "interruption",
+        "noise",
+        "robustness"
+      ],
+      "difficulty": "hard",
+      "description": "User has multiple short interruptions",
+      "perturbation_turn": 3,
+      "perturbation_count": 2,
+      "behavior_steps": [
+        "User answers and starts verification",
+        "User interrupts twice due to surroundings",
+        "User asks 'Abhi kis survey pe hain?'",
+        "Agent calmly restates current survey",
+        "Proceeds normally"
+      ],
+      "expected_state_at_perturbation": "Survey verification",
+      "expected_recovery": "Agent maintains state and clarifies current survey",
+      "failure_indicators": [
+        "Agent loses track of survey order",
+        "Agent shows frustration",
+        "Agent restarts call"
+      ]
+    },
+    {
+      "name": "partial_confirmation_confirms_crop_asks_name",
+      "bucket": "partial_confirmation",
+      "tags": [
+        "confirmation",
+        "tangent",
+        "identity"
+      ],
+      "difficulty": "medium",
+      "description": "User confirms crop but asks agent name mid-answer",
+      "perturbation_turn": 4,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent asks about Magfali crop",
+        "User says 'Haan sahi hai, waise aapka naam kya tha?'",
+        "Agent answers name briefly",
+        "Agent acknowledges confirmation",
+        "Moves to next survey"
+      ],
+      "expected_state_at_perturbation": "Crop confirmation",
+      "expected_recovery": "Agent answers tangent and returns to task",
+      "failure_indicators": [
+        "Agent ignores crop confirmation",
+        "Agent gets stuck on tangent",
+        "Agent re-asks same question"
+      ]
+    },
+    {
+      "name": "partial_confirmation_confirms_survey_asks_data_source",
+      "bucket": "partial_confirmation",
+      "tags": [
+        "confirmation",
+        "data_source",
+        "trust"
+      ],
+      "difficulty": "hard",
+      "description": "User confirms survey but asks where data came from",
+      "perturbation_turn": 4,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent asks about survey 432 crop",
+        "User says 'Haan sahi hai, par data kahan se aaya?'",
+        "Agent briefly explains government records",
+        "Agent acknowledges confirmation",
+        "Proceeds to next survey"
+      ],
+      "expected_state_at_perturbation": "Survey confirmation",
+      "expected_recovery": "Agent answers and smoothly returns to flow",
+      "failure_indicators": [
+        "Agent over-explains and loses flow",
+        "Agent ignores question",
+        "Agent restarts explanation repeatedly"
+      ]
+    },
+    {
+      "name": "partial_confirmation_mid_confirmation_topic_switch",
+      "bucket": "partial_confirmation",
+      "tags": [
+        "confirmation",
+        "topic_switch"
+      ],
+      "difficulty": "medium",
+      "description": "User switches topic mid-confirmation",
+      "perturbation_turn": 5,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent asks about Kapas crop",
+        "User starts confirming then asks about purpose again",
+        "Agent briefly clarifies purpose",
+        "Agent re-asks confirmation question",
+        "Continues survey"
+      ],
+      "expected_state_at_perturbation": "Crop confirmation",
+      "expected_recovery": "Agent redirects politely and repeats question",
+      "failure_indicators": [
+        "Agent forgets original question",
+        "Agent ends call prematurely",
+        "Agent becomes rigid"
+      ]
+    },
+    {
+      "name": "confusion_doesnt_understand_verify",
+      "bucket": "confusion",
+      "tags": [
+        "confusion",
+        "purpose",
+        "clarification"
+      ],
+      "difficulty": "medium",
+      "description": "User does not understand what verify means",
+      "perturbation_turn": 2,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent explains verification",
+        "User says 'Verify matlab kya?'",
+        "Agent explains in simple terms once",
+        "User understands and agrees",
+        "Survey continues"
+      ],
+      "expected_state_at_perturbation": "Purpose explanation",
+      "expected_recovery": "Agent explains simply without repetition",
+      "failure_indicators": [
+        "Agent repeats same sentence",
+        "Agent uses technical jargon",
+        "Agent skips explanation"
+      ]
+    },
+    {
+      "name": "confusion_doesnt_understand_purpose",
+      "bucket": "confusion",
+      "tags": [
+        "confusion",
+        "purpose"
+      ],
+      "difficulty": "medium",
+      "description": "User repeatedly asks purpose of call",
+      "perturbation_turn": 3,
+      "perturbation_count": 2,
+      "behavior_steps": [
+        "Agent explains purpose",
+        "User asks again 'Purpose kya hai?'",
+        "Agent explains once more",
+        "User still confused",
+        "Agent redirects and repeats last survey question"
+      ],
+      "expected_state_at_perturbation": "Purpose clarification",
+      "expected_recovery": "Agent follows rule of two explanations then redirects",
+      "failure_indicators": [
+        "Agent keeps explaining endlessly",
+        "Agent argues with user",
+        "Agent continues without consent"
+      ]
+    },
+    {
+      "name": "confusion_suspicious_asks_proof",
+      "bucket": "confusion",
+      "tags": [
+        "confusion",
+        "trust",
+        "suspicion"
+      ],
+      "difficulty": "hard",
+      "description": "User is suspicious and asks for proof",
+      "perturbation_turn": 3,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent introduces herself",
+        "User asks 'Aap sach mein government se ho?'",
+        "Agent calmly explains government verification call",
+        "User accepts explanation",
+        "Survey proceeds"
+      ],
+      "expected_state_at_perturbation": "Identity and trust building",
+      "expected_recovery": "Agent reassures without becoming defensive",
+      "failure_indicators": [
+        "Agent becomes argumentative",
+        "Agent provides false proof",
+        "Agent ignores concern"
+      ]
+    },
+    {
+      "name": "confusion_elderly_user",
+      "bucket": "confusion",
+      "tags": [
+        "confusion",
+        "elderly",
+        "clarity"
+      ],
+      "difficulty": "medium",
+      "description": "Elderly user struggles to understand process",
+      "perturbation_turn": 4,
+      "perturbation_count": 1,
+      "behavior_steps": [
+        "Agent explains survey",
+        "User says 'Beta, samajh nahi aa raha'",
+        "Agent slows down and simplifies explanation",
+        "User agrees to answer",
+        "Survey continues"
+      ],
+      "expected_state_at_perturbation": "Survey explanation",
+      "expected_recovery": "Agent adapts tone and speed",
+      "failure_indicators": [
+        "Agent rushes",
+        "Agent uses complex language",
+        "Agent shows impatience"
+      ]
+    },
+    {
+      "name": "repeated_perturbation_two_noise_issues",
+      "bucket": "repeated_perturbation",
+      "tags": [
+        "noise",
+        "callback",
+        "robustness"
+      ],
+      "difficulty": "medium",
+      "description": "User faces two separate noise issues",
+      "perturbation_turn": 2,
+      "perturbation_count": 2,
+      "behavior_steps": [
+        "User reports poor signal at start",
+        "Agent repeats information",
+        "Later user again says 'Awaaz nahi aa rahi'",
+        "Agent offers to call back",
+        "User agrees"
+      ],
+      "expected_state_at_perturbation": "Mid verification",
+      "expected_recovery": "Agent offers callback after repeated issues",
+      "failure_indicators": [
+        "Agent ignores repeated noise",
+        "Agent continues forcefully",
+        "Agent shows frustration"
+      ]
+    },
+    {
+      "name": "repeated_perturbation_noise_and_interruption",
+      "bucket": "repeated_perturbation",
+      "tags": [
+        "noise",
+        "interruption",
+        "callback"
+      ],
+      "difficulty": "hard",
+      "description": "Combination of noise and interruption",
+      "perturbation_turn": 3,
+      "perturbation_count": 2,
+      "behavior_steps": [
+        "User has noise issue during first survey",
+        "Later user is interrupted by another person",
+        "User returns confused",
+        "Agent suggests callback",
+        "Call ends politely"
+      ],
+      "expected_state_at_perturbation": "Survey verification",
+      "expected_recovery": "Agent identifies repeated disruption and offers callback",
+      "failure_indicators": [
+        "Agent keeps restarting",
+        "Agent loses patience",
+        "Agent skips callback offer"
+      ]
+    },
+    {
+      "name": "repeated_perturbation_escalating_frustration",
+      "bucket": "repeated_perturbation",
+      "tags": [
+        "noise",
+        "frustration",
+        "callback"
+      ],
+      "difficulty": "hard",
+      "description": "User becomes frustrated due to repeated signal problems",
+      "perturbation_turn": 4,
+      "perturbation_count": 3,
+      "behavior_steps": [
+        "User complains about signal twice",
+        "Third time user sounds irritated",
+        "Agent empathizes",
+        "Agent offers callback at convenient time",
+        "Ends call politely"
+      ],
+      "expected_state_at_perturbation": "Ongoing verification",
+      "expected_recovery": "Agent de-escalates and offers callback",
+      "failure_indicators": [
+        "Agent argues",
+        "Agent ignores frustration",
+        "Agent continues questioning"
+      ]
+    },
+    {
+      "name": "repeated_perturbation_three_signal_drops",
+      "bucket": "repeated_perturbation",
+      "tags": [
+        "noise",
+        "signal_drop",
+        "callback"
+      ],
+      "difficulty": "hard",
+      "description": "Three signal drops throughout the call",
+      "perturbation_turn": 2,
+      "perturbation_count": 3,
+      "behavior_steps": [
+        "Signal drops during greeting",
+        "Drops again during first survey",
+        "Drops third time during second survey",
+        "Agent apologizes and offers callback",
+        "Call ends"
+      ],
+      "expected_state_at_perturbation": "Multiple stages of call",
+      "expected_recovery": "Agent proactively offers callback after repeated drops",
+      "failure_indicators": [
+        "Agent persists despite issues",
+        "Agent restarts endlessly",
+        "Agent fails to end call gracefully"
+      ]
+    }
+  ]
+}
