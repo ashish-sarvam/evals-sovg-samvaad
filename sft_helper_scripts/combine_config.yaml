@@ -1,0 +1,26 @@
+
+# Output configuration
+output_dir: "/home/sft/data/sft-text-data/non-thinking/v1/samvaad/0102"
+output_filename: "combined_final_0102.jsonl"
+
+# Files to combine
+files_to_combine:
+  - "/home/sft/data/sft-text-data/non-thinking/v1/samvaad/samvaad_train_fixed_thinking.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/samvaad/samvaad_val_fixed_thinking.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/samvaad/0102/combined_non_samvaad.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/chat/source_files/kitab_chat_v1.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/chat/source_files/persona_scenario_v1.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/chat/source_files/safety_v1_filtered.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/chat/source_files/safety_v1_non_english.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/chat/source_files/self_identity_english.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/chat/source_files/self_identity_hindi.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/chat/source_files/wiki_data_chat.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/coconot/coconot_gpt52.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/coconot/coconot_regenerated.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/indic_numbers/indic_numbers_50k.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/ifeval/ifeval_openai_format.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/translation_pairs/translation_pairs_200k.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/structured_output/structured_output_openai_format.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/agentic_instruct_oss/general_agent_instruct.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/agentic_instruct_oss/web_singleturn.jsonl"
+  - "/home/sft/data/sft-text-data/non-thinking/v1/agentic_instruct_oss/web_multiturn.jsonl"
